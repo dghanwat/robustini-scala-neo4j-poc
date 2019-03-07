@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    parameters {
+            choice(choices: 'Build\nPackage Patch\nPackage Minor\nPackage Major', description: 'Choose action?', name: 'ACTION')
+        }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build & Unit Test') {
+            steps {
+                sh 'sbt clean coverage test coverageReport'
+            }
+        }
+        stage('Assemble') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh 'sbt universal:packageBin'
+            }
+        }
+        stage('Container') {
+            when {
+                branch 'master'
+            }
+            steps {
+                dockerBuild('graphdb-service','build.sbt')
+            }
+        }
+        stage('Clean Up') {
+            steps {
+                deleteDir()
+            }
+        }
+    }
+}

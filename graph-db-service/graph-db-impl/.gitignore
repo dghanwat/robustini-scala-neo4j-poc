@@ -1,0 +1,17 @@
+.idea
+target
+.cache
+.cache-main
+.cache-tests
+.classpath
+.project
+.tmpBin
+.factorypath
+.settings
+/bin
+/ideatarget
+/logs
+/src/main/resources/dev.conf
+/src/test/resources/dev.conf
+/setenv.bat
+/db
